@@ -3,7 +3,6 @@ const path = require("path");
 const express = require("express");
 const multer = require("multer");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-const { convertPdfFirstPageToImage } = require("../utils/pdfToImage");
 
 const router = express.Router();
 
@@ -97,15 +96,7 @@ router.post("/", upload.single("image"), async (req, res, next) => {
     const question = String(req.body.question || "সম্পূর্ণ ব্যাখ্যা করো").trim();
     const history = parseHistory(req.body.history);
 
-    let filePath = req.file.path;
-    let mimeType = req.file.mimetype;
-
-    if (req.file.mimetype === "application/pdf") {
-      filePath = await convertPdfFirstPageToImage(req.file.path);
-      mimeType = "image/png";
-    }
-
-    const fileBuffer = await fs.readFile(filePath);
+    const fileBuffer = await fs.readFile(req.file.path);
     const base64File = fileBuffer.toString("base64");
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -128,7 +119,7 @@ Analyze the uploaded drawing and answer in Bengali with clear markdown headings.
       {
         inlineData: {
           data: base64File,
-          mimeType,
+          mimeType: req.file.mimetype,
         },
       },
     ]);
