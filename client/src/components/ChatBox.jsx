@@ -37,7 +37,7 @@ export default function ChatBox({ file }) {
       formData.append("question", trimmed);
       formData.append("history", JSON.stringify(messages.slice(-10)));
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:3001"}/api/analyze`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL?.trim() || ""}/api/analyze`, {
         method: "POST",
         body: formData,
       });
