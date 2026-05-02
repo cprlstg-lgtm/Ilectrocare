@@ -1,5 +1,3 @@
-const fs = require("fs/promises");
-const path = require("path");
 const express = require("express");
 const multer = require("multer");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
@@ -26,18 +24,8 @@ Rules:
 
 const allowedMimeTypes = new Set(["image/jpeg", "image/png", "application/pdf"]);
 
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
-    cb(null, path.join(__dirname, "..", "uploads"));
-  },
-  filename: (_req, file, cb) => {
-    const safeName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, "_");
-    cb(null, `${Date.now()}-${safeName}`);
-  },
-});
-
 const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024 },
   fileFilter: (_req, file, cb) => {
     if (!allowedMimeTypes.has(file.mimetype)) {
@@ -96,8 +84,14 @@ router.post("/", upload.single("image"), async (req, res, next) => {
     const question = String(req.body.question || "সম্পূর্ণ ব্যাখ্যা করো").trim();
     const history = parseHistory(req.body.history);
 
-    const fileBuffer = await fs.readFile(req.file.path);
-    const base64File = fileBuffer.toString("base64");
+    if (!req.file.buffer) {
+      return res.status(500).json({
+        success: false,
+        error: "Uploaded file could not be processed.",
+      });
+    }
+
+    const base64File = req.file.buffer.toString("base64");
 
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({
