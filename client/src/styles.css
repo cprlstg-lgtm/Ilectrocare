@@ -1,0 +1,53 @@
+@import url("https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: "Hind Siliguri", system-ui, sans-serif;
+  background: #f5f7fb;
+}
+
+.dark body {
+  background: #0b1117;
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  font-weight: 700;
+  margin-top: 1rem;
+  margin-bottom: 0.45rem;
+}
+
+.markdown p,
+.markdown ul,
+.markdown ol {
+  margin-bottom: 0.7rem;
+}
+
+.markdown ul {
+  list-style: disc;
+  padding-left: 1.3rem;
+}
+
+.markdown ol {
+  list-style: decimal;
+  padding-left: 1.3rem;
+}
+
+.markdown code {
+  border-radius: 0.35rem;
+  padding: 0.1rem 0.3rem;
+  background: rgba(148, 163, 184, 0.22);
+}
