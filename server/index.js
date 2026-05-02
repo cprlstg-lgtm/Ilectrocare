@@ -11,7 +11,6 @@ const PORT = process.env.PORT || 3001;
 
 app.use(cors({ origin: process.env.CLIENT_ORIGIN || true }));
 app.use(express.json({ limit: "1mb" }));
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get("/health", (_req, res) => {
   res.json({ ok: true, service: "electrical-drawing-explainer" });
