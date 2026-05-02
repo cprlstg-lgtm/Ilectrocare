@@ -7,7 +7,7 @@ This implementation uses **Gemini Vision** because the available API key is for 
 ## Features
 
 - JPG, PNG, and PDF upload up to 10MB
-- PDF first page conversion before AI analysis
+- PDF upload support through Gemini document understanding
 - Bengali AI explanation with markdown rendering
 - Chat history with follow-up questions
 - Quick question buttons
@@ -49,17 +49,9 @@ GEMINI_MODEL=gemini-1.5-flash
 PORT=3001
 ```
 
-## PDF Conversion Requirement
+## PDF Support
 
-PDF first-page conversion uses `pdf-poppler`, which needs Poppler available on your system.
-
-On Windows, install Poppler and add its `bin` folder to `PATH`, or set:
-
-```env
-POPPLER_PATH=C:\path\to\poppler\bin
-```
-
-JPG and PNG uploads work without Poppler.
+PDF files are sent directly to Gemini with `application/pdf`. This avoids OS-specific PDF conversion tools and works better on cloud hosts like Railway.
 
 ## Run Locally
 
